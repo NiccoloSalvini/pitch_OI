@@ -1,8 +1,7 @@
 ---
-title: "Text Mining Examples in R"
+title: "Text Mining in R"
 subtitle: "⚔<br/>with Xaringan"
 author: "Salvini Niccolò"
-institute: "[Officine Italia](https://www.officineitalia.org/)"
 date: "2021/01/04 (updated: `r Sys.Date()`)"
 output:
   xaringan::moon_reader:
@@ -14,12 +13,16 @@ output:
       countIncrementalSlides: false
 ---
 
-background-image: url(/img/text_min_logo.png)
-background-size: cover
+background-image: url(img/oi-logo.png)
+background-size: contain
 
 ```{r setup, include=FALSE}
 options(htmltools.dir.version = FALSE)
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = TRUE,
+                      fig.height=9,
+                      fig.width=16)
+
+
 
 library(tidyverse, quietly = T, warn.conflicts = F)
 library(tidytuesdayR, quietly = T, warn.conflicts = F)
@@ -104,6 +107,7 @@ style_mono_accent(
 )
 ```
 
+
 ???
 
 Image credit: [Officine Italia logo](https://images.squarespace-cdn.com/content/5e89b9646da6496e27deb3d5/1586882637764-QZHOK9GWFWMJ4TXC1KKZ/oi-logo-test-2-02.png?content-type=image%2Fpng)
@@ -111,8 +115,7 @@ Image credit: [Officine Italia logo](https://images.squarespace-cdn.com/content/
 ---
 background-image: url(img/oi-logo.png)
 background-position: 0% 100%
-background-size: 30%
-class: center, middledw
+background-size: 20%
 
 # Disclaimers
 
@@ -128,12 +131,37 @@ class: center, middledw
 
 --
 
-- I datasets su cui sono fatti correre i codici sono resi pubblici ai seguenti indirizzi [Repo 1](https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-09-29/beyonce_lyrics.csv), [Repo 2](https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-09-29/taylor_swift_lyrics.csv)
+- I datasets su cui sono fatti correre i codici sono resi pubblici ai seguenti indirizzi [Repo 1](https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-09-29/beyonce_lyrics.csv), [Repo 2](https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-09-29/taylor_swift_lyrics.csv), libri di Jane Austen e download di tweets di Gualtieri (open .csv file tramite [vicinitas](https://www.vicinitas.io/))
+
+---
+background-image: url(img/oi-logo.png)
+background-position: 0% 100%
+background-size: 20%
+
+# Presenter Notes (keyboard shortcuts)
+
+.pull-left[
+- `h`: Help
+
+- `c`: Copy to new window
+
+- `p`: **Presenter mode** (premilo se devi presentare)
+
+- `m`: Mirror
+
+- `f`: Full screen
+
+- `b`: Black out
+
+- `t`: Start/stop timer
+
+- `num + enter`: Nav to page `num`
+]
 
 ---
 class: inverse, center, middle
 
-# Get Started
+# Sentiment Analysis
 
 ```{r loaddata, echo=FALSE, message=FALSE}
 beyonce_lyrics = readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2020/2020-09-29/beyonce_lyrics.csv')
@@ -155,87 +183,112 @@ tidy_books = austen_books() %>%
 ```
 
 ---
+background-image: url(img/oi-logo.png)
+background-position: 0% 100%
+background-size: 20%
+# Jane Austen Books
 
-# Sentiment Analysis (Jane Austen)
-Quali sono le parole associate a sentimenti "buoni" (=joy equivalent) (tramite lexicon NRC, un tipo di dizioonario che raccoglie tutte le paorle associate ad un X sentimento) nei Romanzi di [Jane Austen](https://it.wikipedia.org/wiki/Jane_Austen)?
+--
 
-### i romanzi presi in considerazione sono:
+.left-column[
+###  Research Question:
+]
 
-- **Sense & Sensibility**
-- **Pride and Prejudice**
-- **Mansfield Park**
-- **Emma**
-- **Northanger Abbey**
-- **Persuasion**
+
+--
+
+.right-column[
+Quali sono le parole associate a sentimenti "**buoni**" (=joy equivalent) o "**cattivi**" nei Romanzi di [Jane Austen](https://it.wikipedia.org/wiki/Jane_Austen)?
+
+- Sense and Sensibility 
+- pride adn prejudice 
+- Mansfield park
+- Emma 
+- narthanger abbey
+- Persuasion
+
+]
 
 ---
-# Workflow
-
-Il testo dei libri subisce una serie di passaggi secondo cui:
-
---
-
-A) viene "tokenizzati", cioè ogni parola viene divisa dalla successiva
+## Workflow Sentiment Analysis
+Il testo per ogni libro subisce una serie di passaggi (scatole nere) secondo cui:
 
 --
 
-B) viene preso un dizionario di sentimento (ex. NRC) che raccoglie tutte le parole e i relativi sentimenti associati alla parola
+- Vengono **tokenizzati**, cioè ogni parola viene divisa dalla successiva
 
 --
 
-c) Vengono riarrangati con un ordine (grandezza di conteggio per esempio)
+- Viene preso un **dizionario di sentimento** (ex. NRC) che raccoglie tutte le parole e i relativi sentimenti associati alla parola
 
 --
 
-D) Vengono Visualizzati
+- Vengono riarrangati con un **ordine** (grandezza di conteggio per esempio)
+
+--
+
+- Vengono **Visualizzati**
 
 
 ![](https://www.tidytextmining.com/images/tmwr_0201.png)
 
-
-
 ---
 background-image: url(img/oi-logo.png)
 background-position: 0% 100%
-background-size: 30%
+background-size: 20%
+class: center, middledw
+##  Visualizzati con Tabelle Interattive...
 
-# Vedili in tabelle interattive ed esplorabili
-N.B. anche le tabelle possono essere *adattate* nello stile, coi colori e coi font per i numeri più opportuni e *consoni* allo **stile**.
+Sentiment è un punteggio che assegna uno score al sentimento (joinando ogni parola ad un suo score tramite il dizionario "Bing lexicon") ed è la differenza tra sentimento positivo e sentimento negativo.
 
 ```{r sentbuoni, echo=FALSE, message=FALSE}
 library(textdata, quietly = T, warn.conflicts = F)
+library(DT, quietly = T, warn.conflicts = F)
 nrc_joy = get_sentiments("nrc") %>% 
   filter(sentiment == "joy")
 
-tidy_books %>%
-  filter(book == "Emma") %>%
-  inner_join(nrc_joy) %>%
-  count(word, sort = TRUE) %>% 
-  head(5) %>% 
-  knitr::kable(format = "html")
-```
-
----
-## Rappresento i Risultati cross-libri (ggplot2)
-
-```{r jasent, echo=FALSE, message=FALSE, fig.height=12, fig.width=8}
 jane_austen_sentiment <- tidy_books %>%
   inner_join(get_sentiments("bing")) %>%
   count(book, index = linenumber %/% 80, sentiment) %>%
   spread(sentiment, n, fill = 0) %>%
   mutate(sentiment = positive - negative)
+jane_austen_sentiment %>% 
+  head(50) %>%
+  DT::datatable(fillContainer = FALSE, options = list(pageLength = 5))
+  # knitr::kable(format = "html")
+```
 
+---
+### Visualizzati con Grafici Statici...
+Puoi immaginarti questo su **diversi documenti** per più paesi comparativamente. Index tiene traccia della parte del libro (sezione) dove si è (80 linee di testo per segmento).
+
+```{r jasent, echo=FALSE, message=FALSE}
 ggplot(jane_austen_sentiment, aes(index, sentiment, fill = book)) +
   geom_col(show.legend = FALSE) +
-  facet_wrap(~book, ncol = 2, scales = "free_x") + 
+  facet_wrap(~book, ncol = 2, scales = "free_x")+
   theme_xaringan(background_color = "#FFFFFF")
+```
+---
+```{r jasent2, echo=FALSE, message=FALSE, warning=FALSE, out.width='100%'}
+library(plotly, quietly = T, warn.conflicts = F)
+p = ggplot(jane_austen_sentiment, aes(index, sentiment, fill = book)) +
+  geom_col(show.legend = FALSE) +
+  facet_wrap(~book, ncol = 2, scales = "free_x")+
+  ggtitle(label = "O Grafici Dinamici")+
+  theme_xaringan(background_color = "#FFFFFF")
+ggplotly(p) %>%
+  hide_legend()
 ```
 
 
 ---
-## Conteggio parole più comuni associate a sentimenti negativi e positivi, cross-libri
+background-image: url(img/oi-logo.png)
+background-position: 0% 100%
+background-size: 20%
+class: center, middledw
+### Conteggio parole più comuni associate a sentimenti *negativi* e *positivi*, cross-libri
 
-```{r bencounts, echo=FALSE, message=FALSE, fig.height=12, fig.width=8}
+```{r bencounts, echo=FALSE, message=FALSE}
 bing_word_counts <- tidy_books %>%
   inner_join(get_sentiments("bing")) %>%
   count(word, sentiment, sort = TRUE) %>%
@@ -258,555 +311,287 @@ bing_word_counts %>%
 ---
 background-image: url(img/oi-logo.png)
 background-position: 0% 100%
-background-size: 30%
-
-# Rappresenta una Nuvola della parole più comuni
-```{r wordcloud, echo=FALSE, message=FALSE, fig.height=12, fig.width=8}
+background-size: 20%
+### Rappresenta una Nuvola della parole più comuni
+```{r wordcloud, echo=FALSE, message=FALSE}
 library(wordcloud, quietly = T, warn.conflicts = F)
+library(reshape2, quietly = T, warn.conflicts = F)
 
 tidy_books %>%
-  anti_join(stop_words) %>%
-  count(word) %>%
-  with(wordcloud(word, n, max.words = 100))
-```
-
-
-
----
-As a presentation ni
-nja, you certainly should not be satisfied by the "Hello World" example. You need to understand more about two things:
-
-1. The [remark.js](https://remarkjs.com) library;
-
-1. The **xaringan** package;
-
-Basically **xaringan** injected the chakra of R Markdown (minus Pandoc) into **remark.js**. The slides are rendered by remark.js in the web browser, and the Markdown source needed by remark.js is generated from R Markdown (**knitr**).
-
----
-
-# remark.js
-
-You can see an introduction of remark.js from [its homepage](https://remarkjs.com). You should read the [remark.js Wiki](https://github.com/gnab/remark/wiki) at least once to know how to
-
-- create a new slide (Markdown syntax<sup>*</sup> and slide properties);
-
-- format a slide (e.g. text alignment);
-
-- configure the slideshow;
-
-- and use the presentation (keyboard shortcuts).
-
-It is important to be familiar with remark.js before you can understand the options in **xaringan**.
-
-.footnote[[*] It is different with Pandoc's Markdown! It is limited but should be enough for presentation purposes. Come on... You do not need a slide for the Table of Contents! Well, the Markdown support in remark.js [may be improved](https://github.com/gnab/remark/issues/142) in the future.]
-
----
-background-image: url(`r xaringan:::karl`)
-background-size: cover
-class: center, bottom, inverse
-
-# I was so happy to have discovered remark.js!
-
----
-class: inverse, middle, center
-
-# Using xaringan
-
----
-
-# xaringan
-
-Provides an R Markdown output format `xaringan::moon_reader` as a wrapper for remark.js, and you can use it in the YAML metadata, e.g.
-
-```yaml
----
-title: "A Cool Presentation"
-output:
-  xaringan::moon_reader:
-    yolo: true
-    nature:
-      autoplay: 30000
----
-```
-
-See the help page `?xaringan::moon_reader` for all possible options that you can use.
-
----
-
-# remark.js vs xaringan
-
-Some differences between using remark.js (left) and using **xaringan** (right):
-
-.pull-left[
-1. Start with a boilerplate HTML file;
-
-1. Plain Markdown;
-
-1. Write JavaScript to autoplay slides;
-
-1. Manually configure MathJax;
-
-1. Highlight code with `*`;
-
-1. Edit Markdown source and refresh browser to see updated slides;
-]
-
-.pull-right[
-1. Start with an R Markdown document;
-
-1. R Markdown (can embed R/other code chunks);
-
-1. Provide an option `autoplay`;
-
-1. MathJax just works;<sup>*</sup>
-
-1. Highlight code with `{{}}`;
-
-1. The RStudio addin "Infinite Moon Reader" automatically refreshes slides on changes;
-]
-
-.footnote[[*] Not really. See next page.]
-
----
-
-# Math Expressions
-
-You can write LaTeX math expressions inside a pair of dollar signs, e.g. &#36;\alpha+\beta$ renders $\alpha+\beta$. You can use the display style with double dollar signs:
-
-```
-$$\bar{X}=\frac{1}{n}\sum_{i=1}^nX_i$$
-```
-
-$$\bar{X}=\frac{1}{n}\sum_{i=1}^nX_i$$
-
-Limitations:
-
-1. The source code of a LaTeX math expression must be in one line, unless it is inside a pair of double dollar signs, in which case the starting `$$` must appear in the very beginning of a line, followed immediately by a non-space character, and the ending `$$` must be at the end of a line, led by a non-space character;
-
-1. There should not be spaces after the opening `$` or before the closing `$`.
-
-1. Math does not work on the title slide (see [#61](https://github.com/yihui/xaringan/issues/61) for a workaround).
-
----
-
-# R Code
-
-```{r comment='#'}
-# a boring regression
-fit = lm(dist ~ 1 + speed, data = cars)
-coef(summary(fit))
-dojutsu = c('地爆天星', '天照', '加具土命', '神威', '須佐能乎', '無限月読')
-grep('天', dojutsu, value = TRUE)
+  inner_join(get_sentiments("bing")) %>%
+  count(word, sentiment, sort = TRUE) %>%
+  acast(word ~ sentiment, value.var = "n", fill = 0) %>%
+  comparison.cloud(colors = c("gray20", "gray80"),
+                   max.words = 100)
 ```
 
 ---
+class: inverse, center, middle
 
-# R Plots
+# tf-idf Term Frequency (tf) - Inverse Document Frequency (idf),
 
-```{r cars, fig.height=4, dev='svg'}
-par(mar = c(4, 4, 1, .1))
-plot(cars, pch = 19, col = 'darkgray', las = 1)
-abline(fit, lwd = 2)
+
+---
+background-image: url(img/oi-logo.png)
+background-position: 0% 100%
+background-size: 20%
+###  Due parole su [tf-idf](https://it.wikipedia.org/wiki/Tf-idf)...
+
+"The statistic *tf-idf* is intended to measure how important a word is to a document in a collection (or corpus) of documents, for example, to one novel in a collection of novels or to one website in a collection of websites.
+The idea of tf-idf is to find the important words for the content of each document by decreasing the weight for commonly used words and increasing the weight for words that are not used very much in a collection or corpus of documents, in this case, the group of Jane Austen’s novels as a whole."
+
+```{r ex, echo=FALSE, message=FALSE}
+book_words <- austen_books() %>%
+  unnest_tokens(word, text) %>%
+  count(book, word, sort = TRUE)
+
+book_tf_idf <- book_words %>%
+  bind_tf_idf(word, book, n)
+
+book_tf_idf %>% 
+  head(30) %>% 
+DT::datatable(fillContainer = FALSE, options = list(pageLength = 4))
 ```
 
 ---
+background-image: url(img/oi-logo.png)
+background-position: 0% 100%
+background-size: 20%
+## td-idf score per parola-docs
+```{r tfidf, echo=FALSE, message=FALSE}
+book_tf_idf <- book_words %>%
+  bind_tf_idf(word, book, n)
 
-# Tables
+book_tf_idf %>%
+  group_by(book) %>%
+  slice_max(tf_idf, n = 15) %>%
+  ungroup() %>%
+  ggplot(aes(tf_idf, fct_reorder(word, tf_idf), fill = book)) +
+  geom_col(show.legend = FALSE) +
+  facet_wrap(~book, ncol = 2, scales = "free") +
+  labs(x = "tf-idf score", y = NULL) +
+  theme_xaringan(background_color = "#FFFFFF")
+  
+```
+---
+class: inverse, center, middle
 
-If you want to generate a table, make sure it is in the HTML format (instead of Markdown or other formats), e.g.,
+# Relazioni tra Parole e correlazioni, "n-grams"
 
-```{r}
-knitr::kable(head(iris), format = 'html')
+---
+###  Qualcosa su [n-gram](https://it.wikipedia.org/wiki/N-gramma)
+
+"Many interesting text analyses are based on the relationships between words, whether examining which words tend to follow others immediately, or that tend to co-occur within the same documents [...]
+This includes tokenizing (punto A, slide 7 ) with token = "ngrams" argument, which tokenizes by pairs of adjacent words rather than by individual ones" 
+In questo caso **Bigrams** (si può fare anche **Trigrams** (dove $n = 3$ numero di parole):
+
+```{r bigrams, echo=F, message=F}
+austen_bigrams <- austen_books() %>%
+  unnest_tokens(bigram, text, token = "ngrams", n = 2)
+bigrams_separated <- austen_bigrams %>%
+  separate(bigram, c("word1", "word2"), sep = " ")
+
+bigrams_filtered <- bigrams_separated %>%
+  filter(!word1 %in% stop_words$word) %>%
+  filter(!word2 %in% stop_words$word)
+
+# new bigram counts:
+bigram_counts <- bigrams_filtered %>% 
+  count(word1, word2, sort = TRUE)
+
+bigrams_united <- bigrams_filtered %>%
+  unite(bigram, word1, word2, sep = " ")
+
+bigrams_united %>% 
+  head(30) %>% 
+DT::datatable(fillContainer = FALSE, options = list(pageLength = 5))
+  
+```
+---
+## Combini il bigram con il tf-idf
+Consideri il bigramma come se fosse una parola sola e la tratti con tf-idf. Facendo questo eviti le parole che per sintassi e grammatica stanno sempre insieme come verbi fraseologici etc.)
+```{r nbigram, echo=F, message=F}
+bigram_tf_idf <- bigrams_united %>%
+  count(book, bigram) %>%
+  bind_tf_idf(bigram, book, n) %>%
+  arrange(desc(tf_idf))
+
+bigram_tf_idf %>%
+  arrange(desc(tf_idf)) %>%
+  group_by(book) %>%
+  slice_max(tf_idf, n = 10) %>%
+  ungroup() %>%
+  mutate(bigram = reorder(bigram, tf_idf)) %>%
+  ggplot(aes(tf_idf, bigram, fill = book)) +
+  geom_col(show.legend = FALSE) +
+  facet_wrap(~ book, ncol = 2, scales = "free") +
+  labs(x = "tf-idf di un bigramma", y = NULL) +
+  theme_xaringan(background_color = "#FFFFFF")
+```
+---
+### ... E riapplichi i concetti della **Sentiment**
+
+In questo specifico caso vai a esplorare una disambiguazione comune associata alla parola "not" in inglese. Se avessimo fatto una sentiment e avessimo trovato la parola "happy" nel documento, allora il sentiment associato al documento sarebbe stato positivo. Tuttavia quando la parola è preceduta da **not** in realtà comunica l'esatto opposto. Quindi esamino le parole più comuni sia accostate ad un sentimento e anche precedute dalla parola "not":
+```{r afinn, echo=F, message=F}
+AFINN <- get_sentiments("afinn")
+
+bigrams_separated <- austen_bigrams %>%
+  separate(bigram, c("word1", "word2"), sep = " ")
+
+not_words <- bigrams_separated %>%
+  filter(word1 == "not") %>%
+  inner_join(AFINN, by = c(word2 = "word")) %>%
+  count(word2, value, sort = TRUE)
+not_words %>%
+  mutate(contribution = n * value) %>%
+  arrange(desc(abs(contribution))) %>%
+  head(20) %>%
+  mutate(word2 = reorder(word2, contribution)) %>%
+  ggplot(aes(n * value, word2, fill = n * value > 0)) +
+  geom_col(show.legend = FALSE) +
+  labs(x = "Valore del sentimento * # di volte che compare",
+       y = "Parole precedute da \"not\"") +
+  theme_xaringan(background_color = "#FFFFFF")
+
 ```
 
 ---
+## Visualizzare **Network** di bigrammi
 
-# HTML Widgets
+Possiamo anche essere interessati a visualizzare le relazioni tra parole simultaneamente, anzichè qualcuna in cima ad una lista: 
+```{r net, echo=F, message=F, warning=F}
+library(igraph, quietly = F)
+library(ggraph, quietly = F)
+bigram_graph <- bigram_counts %>%
+  filter(n > 20) %>%
+  graph_from_data_frame()
 
-I have not thoroughly tested HTML widgets against **xaringan**. Some may work well, and some may not. It is a little tricky.
+## setta seed
+set.seed(2021)
+a <- grid::arrow(type = "closed", length = unit(.15, "inches"))
 
-Similarly, the Shiny mode (`runtime: shiny`) does not work. I might get these issues fixed in the future, but these are not of high priority to me. I never turn my presentation into a Shiny app. When I need to demonstrate more complicated examples, I just launch them separately. It is convenient to share slides with other people when they are plain HTML/JS applications.
+ggraph(bigram_graph, layout = "fr") +
+  geom_edge_link(aes(edge_alpha = n), show.legend = FALSE,
+                 arrow = a, end_cap = circle(.07, 'inches')) +
+  geom_node_point(color = "lightblue", size = 5) +
+  geom_node_text(aes(label = name), vjust = 1, hjust = 1) +
+  theme_void()
 
-See the next page for two HTML widgets.
-
----
-
-```{r out.width='100%', fig.height=6, eval=require('leaflet')}
-library(leaflet)
-leaflet() %>% addTiles() %>% setView(-93.65, 42.0285, zoom = 17)
 ```
 
 ---
+class: inverse, center, middle
 
-```{r eval=require('DT'), tidy=FALSE}
-DT::datatable(
-  head(iris, 10),
-  fillContainer = FALSE, options = list(pageLength = 8)
-)
-```
+# Topic Modeling
 
 ---
+background-image: url(img/oi-logo.png)
+background-position: 0% 100%
+background-size: 20%
 
-# Some Tips
+## Due parole sul Topic Modeling
 
-- Do not forget to try the `yolo` option of `xaringan::moon_reader`.
+"In text mining, we often have collections of documents, such as blog posts or news articles, that we’d like to divide into **natural groups** so that we can understand them separately. Topic modeling is a method for **unsupervised classification** of such documents, **similar to clustering** on numeric data, which finds natural groups of items even when we’re not sure what we’re looking for."
 
-    ```yaml
-    output:
-      xaringan::moon_reader:
-        yolo: true
-    ```
-
----
-
-# Some Tips
-
-- Slides can be automatically played if you set the `autoplay` option under `nature`, e.g. go to the next slide every 30 seconds in a lightning talk:
-
-    ```yaml
-    output:
-      xaringan::moon_reader:
-        nature:
-          autoplay: 30000
-    ```
-
-- If you want to restart the play after it reaches the last slide, you may set the sub-option `loop` to TRUE, e.g.,
-
-    ```yaml
-    output:
-      xaringan::moon_reader:
-        nature:
-          autoplay:
-            interval: 30000
-            loop: true
-    ```
-
----
-
-# Some Tips
-
-- A countdown timer can be added to every page of the slides using the `countdown` option under `nature`, e.g. if you want to spend one minute on every page when you give the talk, you can set:
-
-    ```yaml
-    output:
-      xaringan::moon_reader:
-        nature:
-          countdown: 60000
-    ```
-
-    Then you will see a timer counting down from `01:00`, to `00:59`, `00:58`, ... When the time is out, the timer will continue but the time turns red.
-    
----
-
-# Some Tips
-
-- The title slide is created automatically by **xaringan**, but it is just another remark.js slide added before your other slides.
-
-    The title slide is set to `class: center, middle, inverse, title-slide` by default. You can change the classes applied to the title slide with the `titleSlideClass` option of `nature` (`title-slide` is always applied).
-
-    ```yaml
-    output:
-      xaringan::moon_reader:
-        nature:
-          titleSlideClass: [top, left, inverse]
-    ```
-    
 --
 
-- If you'd like to create your own title slide, disable **xaringan**'s title slide with the `seal = FALSE` option of `moon_reader`.
+Ci sono diversi modelli che tirano fuori i Topics da stringhe di testo, quello più popolare è **LDA**. La teoria qui diventa un po' più pesante e la assumo.
 
-    ```yaml
-    output:
-      xaringan::moon_reader:
-        seal: false
-    ```
+--
 
----
+I Dati in questo caso vengono da "AssociatedPress" e sono una collezione di 2246 articoli di un' agenzia americana. Il modello associa ad ogni parola uno score che indica la probabilità che quella stessa parola provenga un tema $T$, dati un numero di temi decisi dall'utente. Qui presumo $T = 2$ . 
 
-# Some Tips
+```{r loaddare, echo=F, message=F, warning=F}
+library(topicmodels, quietly = T)
 
-- There are several ways to build incremental slides. See [this presentation](https://slides.yihui.org/xaringan/incremental.html) for examples.
-
-- The option `highlightLines: true` of `nature` will highlight code lines that start with `*`, or are wrapped in `{{ }}`, or have trailing comments `#<<`;
-
-    ```yaml
-    output:
-      xaringan::moon_reader:
-        nature:
-          highlightLines: true
-    ```
-
-    See examples on the next page.
-
----
-
-# Some Tips
-
-
-.pull-left[
-An example using a leading `*`:
-
-    ```r
-    if (TRUE) {
-    ** message("Very important!")
-    }
-    ```
-Output:
-```r
-if (TRUE) {
-* message("Very important!")
-}
+data("AssociatedPress")
+## fitting model
+ap_lda <- LDA(AssociatedPress, k = 2, control = list(seed = 1234))
+ap_topics <- tidy(ap_lda, matrix = "beta")
 ```
 
-This is invalid R code, so it is a plain fenced code block that is not executed.
-]
-
-.pull-right[
-An example using `{{}}`:
-
-````
-`r ''````{r tidy=FALSE}
-if (TRUE) {
-*{{ message("Very important!") }}
-}
-```
-````
-Output:
-```{r tidy=FALSE}
-if (TRUE) {
-{{ message("Very important!") }}
-}
-```
-
-It is valid R code so you can run it. Note that `{{}}` can wrap an R expression of multiple lines.
-]
+### I Risultati...
 
 ---
+background-image: url(img/oi-logo.png)
+background-position: 0% 100%
+background-size: 20%
 
-# Some Tips
+### Topic 1 e 2
 
-An example of using the trailing comment `#<<` to highlight lines:
+Vedo le top 10 parole e posso desumere che il tema a SX riguarda **l'Economia-Finanza**, a DX **Politica**
 
-````markdown
-`r ''````{r tidy=FALSE}
-library(ggplot2)
-ggplot(mtcars) + 
-  aes(mpg, disp) + 
-  geom_point() +   #<<
-  geom_smooth()    #<<
+```{r risu, echo=F, warning=F, message=F}
+ap_top_terms <- ap_topics %>%
+  group_by(topic) %>%
+  top_n(10, beta) %>%
+  ungroup() %>%
+  arrange(topic, -beta)
+
+ap_top_terms %>%
+  mutate(term = reorder_within(term, beta, topic)) %>%
+  ggplot(aes(beta, term, fill = factor(topic))) +
+  geom_col(show.legend = FALSE) +
+  facet_wrap(~ topic, scales = "free") +
+  scale_y_reordered()+ 
+  theme_xaringan(background_color = "#FFFFFF")
 ```
-````
-
-Output:
-
-```{r tidy=FALSE, eval=FALSE}
-library(ggplot2)
-ggplot(mtcars) + 
-  aes(mpg, disp) + 
-  geom_point() +   #<<
-  geom_smooth()    #<<
-```
-
 ---
+## ... Ma puoi anche fare cosi'
 
-# Some Tips
+Puoi anche andare a vedere le differenze maggiori tra score di probabilità, chiamala $\beta$, tra le parole e andarle a comparare nuovamente i due topics. In questa maniera filtri sole le parole meno comuni, quindi quelle potenzialmente più pregne di significato.
 
-When you enable line-highlighting, you can also use the chunk option `highlight.output` to highlight specific lines of the text output from a code chunk. For example, `highlight.output = TRUE` means highlighting all lines, and `highlight.output = c(1, 3)` means highlighting the first and third line.
+```{r oddsratio, message=F, warning=F, echo=F}
+beta_spread <- ap_topics %>%
+  mutate(topic = paste0("topic", topic)) %>%
+  spread(topic, beta) %>%
+  filter(topic1 > .001 | topic2 > .001) %>%
+  mutate(log_ratio = log2(topic2 / topic1))
 
-````md
-`r ''````{r, highlight.output=c(1, 3)}
-head(iris)
-```
-````
-
-```{r, highlight.output=c(1, 3), echo=FALSE}
-head(iris)
+beta_spread %>%
+  group_by(direction = log_ratio > 0) %>%
+  top_n(10, abs(log_ratio)) %>%
+  ungroup() %>%
+  mutate(term = reorder(term, log_ratio)) %>%
+  ggplot(aes(log_ratio, term)) +
+  geom_col() +
+  labs(x = "Log2 odds ratio dei betas tra topic 2 / topic 1", y = NULL)+ 
+  theme_xaringan(background_color = "#FFFFFF")
 ```
 
-Question: what does `highlight.output = c(TRUE, FALSE)` mean? (Hint: think about R's recycling of vectors)
 
----
 
-# Some Tips
 
-- To make slides work offline, you need to download a copy of remark.js in advance, because **xaringan** uses the online version by default (see the help page `?xaringan::moon_reader`).
 
-- You can use `xaringan::summon_remark()` to download the latest or a specified version of remark.js. By default, it is downloaded to `libs/remark-latest.min.js`.
 
-- Then change the `chakra` option in YAML to point to this file, e.g.
 
-    ```yaml
-    output:
-      xaringan::moon_reader:
-        chakra: libs/remark-latest.min.js
-    ```
 
-- If you used Google fonts in slides (the default theme uses _Yanone Kaffeesatz_, _Droid Serif_, and _Source Code Pro_), they won't work offline unless you download or install them locally. The Heroku app [google-webfonts-helper](https://google-webfonts-helper.herokuapp.com/fonts) can help you download fonts and generate the necessary CSS.
+<!-- Soggetti: [Julia Silge](https://twitter.com/juliasilge), [David Robinson](https://twitter.com/drob) -->
 
----
+<!-- Vale la pena vedere i tweets nel tempo: -->
 
-# Macros
+<!-- ```{r importtweets, echo=F, message=F, warning=F} -->
+<!-- library(lubridate, quietly = T) -->
+<!-- library(readr, quietly = T) -->
+<!-- library(readxl, quietly = T) -->
 
-- remark.js [allows users to define custom macros](https://github.com/yihui/xaringan/issues/80) (JS functions) that can be applied to Markdown text using the syntax `![:macroName arg1, arg2, ...]` or `![:macroName arg1, arg2, ...](this)`. For example, before remark.js initializes the slides, you can define a macro named `scale`:
+<!-- tweets_dave <- read_csv("https://raw.githubusercontent.com/dgrtwo/tidy-text-mining/master/data/tweets_dave.csv") -->
+<!-- tweets_julia <- read_csv("https://raw.githubusercontent.com/dgrtwo/tidy-text-mining/master/data/tweets_julia.csv") -->
+<!-- ## due soggetti nuovi  -->
+<!-- tweets_gualtieri = read_excel("data/gualtierieurope.xlsx") -->
+<!-- tweets_lagarde <- read_csv("data/Lagarde.xlsx") -->
 
-    ```js
-    remark.macros.scale = function (percentage) {
-      var url = this;
-      return '<img src="' + url + '" style="width: ' + percentage + '" />';
-    };
-    ```
 
-    Then the Markdown text
+<!-- tweets <- bind_rows(tweets_julia %>%  -->
+<!--                       mutate(person = "Julia"), -->
+<!--                     tweets_dave %>%  -->
+<!--                       mutate(person = "David")) %>% -->
+<!--   mutate(timestamp = ymd_hms(timestamp)) -->
+<!-- ggplot(tweets, aes(x = timestamp, fill = person)) + -->
+<!--   geom_histogram(position = "identity", bins = 20, show.legend = FALSE) + -->
+<!--   facet_wrap(~person, ncol = 1) -->
+<!-- ``` -->
 
-    ```markdown
-    ![:scale 50%](image.jpg)
-    ```
 
-    will be translated to
-    
-    ```html
-    <img src="image.jpg" style="width: 50%" />
-    ```
 
----
 
-# Macros (continued)
-
-- To insert macros in **xaringan** slides, you can use the option `beforeInit` under the option `nature`, e.g.,
-
-    ```yaml
-    output:
-      xaringan::moon_reader:
-        nature:
-          beforeInit: "macros.js"
-    ```
-
-    You save your remark.js macros in the file `macros.js`.
-
-- The `beforeInit` option can be used to insert arbitrary JS code before `remark.create()`. Inserting macros is just one of its possible applications.
-
----
-
-# CSS
-
-Among all options in `xaringan::moon_reader`, the most challenging but perhaps also the most rewarding one is `css`, because it allows you to customize the appearance of your slides using any CSS rules or hacks you know.
-
-You can see the default CSS file [here](https://github.com/yihui/xaringan/blob/master/inst/rmarkdown/templates/xaringan/resources/default.css). You can completely replace it with your own CSS files, or define new rules to override the default. See the help page `?xaringan::moon_reader` for more information.
-
----
-
-# CSS
-
-For example, suppose you want to change the font for code from the default "Source Code Pro" to "Ubuntu Mono". You can create a CSS file named, say, `ubuntu-mono.css`:
-
-```css
-@import url(https://fonts.googleapis.com/css?family=Ubuntu+Mono:400,700,400italic);
-
-.remark-code, .remark-inline-code { font-family: 'Ubuntu Mono'; }
-```
-
-Then set the `css` option in the YAML metadata:
-
-```yaml
-output:
-  xaringan::moon_reader:
-    css: ["default", "ubuntu-mono.css"]
-```
-
-Here I assume `ubuntu-mono.css` is under the same directory as your Rmd.
-
-See [yihui/xaringan#83](https://github.com/yihui/xaringan/issues/83) for an example of using the [Fira Code](https://github.com/tonsky/FiraCode) font, which supports ligatures in program code.
-
----
-
-# Themes
-
-Don't want to learn CSS? Okay, you can use some user-contributed themes. A theme typically consists of two CSS files `foo.css` and `foo-fonts.css`, where `foo` is the theme name. Below are some existing themes:
-
-```{r, R.options=list(width = 70)}
-names(xaringan:::list_css())
-```
-
----
-
-# Themes
-
-To use a theme, you can specify the `css` option as an array of CSS filenames (without the `.css` extensions), e.g.,
-
-```yaml
-output:
-  xaringan::moon_reader:
-    css: [default, metropolis, metropolis-fonts]
-```
-
-If you want to contribute a theme to **xaringan**, please read [this blog post](https://yihui.org/en/2017/10/xaringan-themes).
-
----
-class: inverse, middle, center
-background-image: url(https://upload.wikimedia.org/wikipedia/commons/3/39/Naruto_Shiki_Fujin.svg)
-background-size: contain
-
-# Naruto
-
----
-background-image: url(https://upload.wikimedia.org/wikipedia/commons/b/be/Sharingan_triple.svg)
-background-size: 100px
-background-position: 90% 8%
-
-# Sharingan
-
-The R package name **xaringan** was derived<sup>1</sup> from **Sharingan**, a dōjutsu in the Japanese anime _Naruto_ with two abilities:
-
-- the "Eye of Insight"
-
-- the "Eye of Hypnotism"
-
-I think a presentation is basically a way to communicate insights to the audience, and a great presentation may even "hypnotize" the audience.<sup>2,3</sup>
-
-.footnote[
-[1] In Chinese, the pronounciation of _X_ is _Sh_ /ʃ/ (as in _shrimp_). Now you should have a better idea of how to pronounce my last name _Xie_.
-
-[2] By comparison, bad presentations only put the audience to sleep.
-
-[3] Personally I find that setting background images for slides is a killer feature of remark.js. It is an effective way to bring visual impact into your presentations.
-]
-
----
-
-# Naruto terminology
-
-The **xaringan** package borrowed a few terms from Naruto, such as
-
-- [Sharingan](https://naruto.fandom.com/wiki/Sharingan) (写輪眼; the package name)
-
-- The [moon reader](https://naruto.fandom.com/wiki/Moon_Reader) (月読; an attractive R Markdown output format)
-
-- [Chakra](https://naruto.fandom.com/wiki/Chakra) (查克拉; the path to the remark.js library, which is the power to drive the presentation)
-
-- [Nature transformation](https://naruto.fandom.com/wiki/Nature_Transformation) (性質変化; transform the chakra by setting different options)
-
-- The [infinite moon reader](https://naruto.fandom.com/wiki/Infinite_Tsukuyomi) (無限月読; start a local web server to continuously serve your slides)
-
-- The [summoning technique](https://naruto.fandom.com/wiki/Summoning_Technique) (download remark.js from the web)
-
-You can click the links to know more about them if you want. The jutsu "Moon Reader" may seem a little evil, but that does not mean your slides are evil.
-
----
-
-class: center
-
-# Hand seals (印)
-
-Press `h` or `?` to see the possible ninjutsu you can use in remark.js.
-
-![](https://upload.wikimedia.org/wikipedia/commons/7/7e/Mudra-Naruto-KageBunshin.svg)
-
----
-
-class: center, middle
-
-# Thanks!
-
-Slides created via the R package [**xaringan**](https://github.com/yihui/xaringan).
-
-The chakra comes from [remark.js](https://remarkjs.com), [**knitr**](https://yihui.org/knitr), and [R Markdown](https://rmarkdown.rstudio.com).
