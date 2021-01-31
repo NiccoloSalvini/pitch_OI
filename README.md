@@ -9,7 +9,7 @@
 Status](https://api.netlify.com/api/v1/badges/9db89be9-d92c-420e-a390-3600ccbbd4f8/deploy-status)](https://app.netlify.com/sites/textmining/deploys)
 
 *author*: **[Niccolò Salvini](https://niccolosalvini.netlify.app/)**
-*date*: 05 gennaio, 2021
+*date*: 30 gennaio, 2021
 
 <br> <br>
 
