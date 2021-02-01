@@ -28,9 +28,6 @@ knitr::knit_hooks$set(imgcenter = function(before, options, envir){  # to center
   }
 })
 
-
-# xaringan::infinite_moon_reader("slides_gen.Rmd")
-
 ```
 
 
@@ -48,16 +45,33 @@ _date_: `r format(Sys.Date(), "%d %B, %Y")`
 <br> <br> 
 
 
-```{r example, echo=FALSE, imgcenter = TRUE, fig.retina=3}
-knitr::include_graphics("img/readme_example.jpg") 
+```{r frontimage, echo=FALSE, imgcenter = TRUE, fig.retina=3}
+knitr::include_graphics("img/netflow.jpg") 
 ```
 
 ### Deployment:
 
-Slides are served with [Netlify](https://www.netlify.com/) and can be found in the upper right corner of the GitHUb page ore directly at [textmining.netlify.app](https://textmining.netlify.app)
+Slides are hosted in [Netlify](https://www.netlify.com/) and can be found in the upper right corner of the GitHUb page, or directly at [textmining.netlify.app](https://textmining.netlify.app)
 
-### Description:
-These slides have been composed to orient stakeholders giving a perspective on the effectiveness of the R language through its Text Mining libraries (`Tidytext` and `Tidyverse` stack, `ggplot2` visulaz ) as well as giving an intuition on its graphical possibilities. They are written in Italian.
+### Goal and Description:
+
+These slides have been composed to orient stakeholders giving a perspective on the effectiveness of the R language through its Text Mining libraries (`Tidytext`, `textrecipes`, `{Tidymodels}` `{Tidyverse}` stack. `ggplot2` and its extensions) as well as giving an intuition on its graphical possibilities. They are written in Italian. Main arguments treated are:
+
+- **Sentiment Analysis**
+
+- **tf-idf**
+
+- **n-grams **
+
+- **Topic Modeling**
+
+- **Network visualization (bigram) **
+
+- **Network flow visualization (trigram) **
+
+- **Text Machine Learning through the tidymodel stack **
+
+Slides are made with `xaringan` and their style is managed through `xaringanthemer` which generates a css stylesheet based on a function arguments. Gggplot theme is coherently adapted to the style. 
 
 ### License:
 

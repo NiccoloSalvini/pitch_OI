@@ -25,7 +25,8 @@ knitr::opts_chunk$set(echo = F,
                       fig.align = 'center',
                       fig.asp = 0.618, # 1 / phi
                       out.width = "700px",
-                      fig.retina = 3, 
+                      fig.showtext = TRUE,
+                      fig.retina = 2, 
                       warning = F,
                       message = F)
 
@@ -60,7 +61,6 @@ library(showtext, quietly = T, warn.conflicts = F)
 ## manage conflicts
 conflict_prefer("filter", "dplyr")
 conflict_prefer("crossing", "tidyr")
-
 
 
 # 
@@ -127,7 +127,8 @@ style_mono_accent(
   base_color = "#1c5253",
   header_font_google = google_font("Rubik"),
   text_font_google   = google_font("Rubik", "300", "300i"),
-  code_font_google   = google_font("Fira Mono")
+  code_font_google   = google_font("Fira Mono"),
+  background_color = "#FFFFFF"
 )
 
 ```
@@ -257,6 +258,13 @@ Il testo per ogni libro subisce una serie di passaggi (scatole nere) secondo cui
 - Vengono **Visualizzati**
 
 
+---
+background-image: url(img/oi-logo.png)
+background-position: 0% 100%
+background-size: 20%
+# Typical workflow for **Text** analysis 
+
+
 ![](https://www.tidytextmining.com/images/tmwr_0201.png)
 
 ---
@@ -304,16 +312,19 @@ Puoi immaginarti questo su **diversi documenti** per più paesi comparativamente
 ggplot(jane_austen_sentiment, aes(index, sentiment, fill = book)) +
   geom_col(show.legend = FALSE) +
   facet_wrap(~book, ncol = 2, scales = "free_x")+
-  theme_xaringan(background_color = "#FFFFFF")
+  theme_xaringan() +
+  theme(axis.text.y = element_text(angle = 30, vjust = 0.5, hjust=1)) 
 ```
+
 ---
+
 ```{r jasent2, out.width='100%'}
 library(plotly, quietly = T, warn.conflicts = F)
 p = ggplot(jane_austen_sentiment, aes(index, sentiment, fill = book)) +
   geom_col(show.legend = FALSE) +
   facet_wrap(~book, ncol = 2, scales = "free_x")+
   ggtitle(label = "O Grafici Dinamici")+
-  theme_xaringan(background_color = "#FFFFFF")
+  theme_xaringan()
 ggplotly(p) %>%
   hide_legend()
 ```
@@ -341,7 +352,8 @@ bing_word_counts %>%
   facet_wrap(~sentiment, scales = "free_y") +
   labs(x = "Le contribuzioni dei sentimenti",
        y = NULL) +
-  theme_xaringan(background_color = "#FFFFFF")
+  theme_xaringan() +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
 
 ```
 
@@ -415,7 +427,7 @@ book_tf_idf %>%
   geom_col(show.legend = FALSE) +
   facet_wrap(~book, ncol = 2, scales = "free") +
   labs(x = "tf-idf score", y = NULL) +
-  theme_xaringan(background_color = "#FFFFFF")
+  theme_xaringan()
   
 ```
 ---
@@ -479,8 +491,7 @@ bigram_tf_idf %>%
   ggplot(aes(tf_idf, bigram, fill = book)) +
   geom_col(show.legend = FALSE) +
   facet_wrap(~ book, ncol = 2, scales = "free") +
-  labs(x = "tf-idf di un bigramma", y = NULL) +
-  theme_xaringan(background_color = "#FFFFFF")
+  labs(x = "tf-idf di un bigramma", y = NULL) 
 ```
 ---
 ### ... E riapplichi i concetti della **Sentiment**
@@ -505,7 +516,7 @@ not_words %>%
   geom_col(show.legend = FALSE) +
   labs(x = "Valore del sentimento * # di volte che compare",
        y = "Parole precedute da \"not\"") +
-  theme_xaringan(background_color = "#FFFFFF")
+  theme_xaringan()
 
 ```
 
@@ -586,7 +597,8 @@ ap_top_terms %>%
   geom_col(show.legend = FALSE) +
   facet_wrap(~ topic, scales = "free") +
   scale_y_reordered()+ 
-  theme_xaringan(background_color = "#FFFFFF")
+  theme_xaringan(background_color = "#FFFFFF") +
+  theme(axis.text.x = element_text(angle = 60, vjust = 0.5, hjust=1))
 ```
 
 ---
@@ -608,8 +620,11 @@ beta_spread %>%
   mutate(term = reorder(term, log_ratio)) %>%
   ggplot(aes(log_ratio, term)) +
   geom_col() +
-  labs(x = "Log2 odds ratio dei betas tra topic 2 / topic 1", y = NULL)+ 
-  theme_xaringan(background_color = "#FFFFFF")
+  labs(
+    x = "Log2 odds ratio dei betas tra topic 2 / topic 1",
+    y = ""
+    )+ 
+  theme_xaringan()
 ```
 ---
 class: inverse, center, middle
@@ -923,7 +938,9 @@ complaints %>%
          product = fct_rev(fct_infreq(factor(product)))) %>%
   ggplot(aes(y = product)) +
   geom_bar() +
-  labs(x = NULL, y = NULL)
+  labs(x = NULL, y = NULL) +
+  theme(panel.background = element_rect(fill = "#FFFFFF", colour = "grey92"))
+  
 
 
 ```
