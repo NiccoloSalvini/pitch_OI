@@ -13,9 +13,6 @@ output:
 knitr::opts_chunk$set(
   warning = FALSE,  
   strip.white = TRUE,                 # if FALSE knitr will not remove white spaces at the beg or end
-  fig.path = "img/",                  # file path to the directory DESTINATION where knitr shall store the
-  fig.width=12,                       # the width for plots created by code chunk
-  fig.height=8,                       # the height for plots created by code chunk
   cache = FALSE                       # if TRUE knitr will cache the results to reuse in future knits
 )
 
@@ -61,15 +58,15 @@ These slides have been composed to orient stakeholders giving a perspective on t
 
 - **tf-idf**
 
-- **n-grams **
+- **n-grams**
 
 - **Topic Modeling**
 
-- **Network visualization (bigram) **
+- **Network visualization (bigram)**
 
-- **Network flow visualization (trigram) **
+- **Network flow visualization (trigram)**
 
-- **Text Machine Learning through the tidymodel stack **
+- **Text Machine Learning through the tidymodel stack**
 
 Slides are made with `xaringan` and their style is managed through `xaringanthemer` which generates a css stylesheet based on a function arguments. Gggplot theme is coherently adapted to the style. 
 

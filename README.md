@@ -9,7 +9,7 @@
 Status](https://api.netlify.com/api/v1/badges/9db89be9-d92c-420e-a390-3600ccbbd4f8/deploy-status)](https://app.netlify.com/sites/textmining/deploys)
 
 *author*: **[Niccolò Salvini](https://niccolosalvini.netlify.app/)**
-*date*: 01 febbraio, 2021
+*date*: 05 febbraio, 2021
 
 <br> <br>
 
@@ -38,15 +38,15 @@ Main arguments treated are:
 
   - **tf-idf**
 
-  - **n-grams **
+  - **n-grams**
 
   - **Topic Modeling**
 
-  - **Network visualization (bigram) **
+  - **Network visualization (bigram)**
 
-  - **Network flow visualization (trigram) **
+  - **Network flow visualization (trigram)**
 
-  - **Text Machine Learning through the tidymodel stack **
+  - **Text Machine Learning through the tidymodel stack**
 
 Slides are made with `xaringan` and their style is managed through
 `xaringanthemer` which generates a css stylesheet based on a function
